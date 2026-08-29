@@ -1,3 +1,11 @@
 {
-  "publicaciones": []
+  "publicaciones": [
+    {
+      "titulo": "Dios está contigo",
+      "mensaje": "Aunque hoy no puedas ver el camino completo, sigue confiando. Dios conoce tus luchas, escucha tus oraciones y está preparando el camino delante de ti.",
+      "versiculo": "Encomienda al Señor tu camino; confía en Él, y Él actuará.",
+      "referencia": "Salmos 37:5",
+      "fecha": "2026-08-28"
+    }
+  ]
 }
