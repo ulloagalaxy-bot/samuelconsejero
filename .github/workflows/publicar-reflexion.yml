@@ -1,0 +1,77 @@
+name: Publicar reflexión
+
+on:
+  workflow_dispatch:
+    inputs:
+      titulo:
+        description: "Título de la reflexión"
+        required: true
+        type: string
+      mensaje:
+        description: "Mensaje"
+        required: true
+        type: string
+      versiculo:
+        description: "Texto del versículo"
+        required: true
+        type: string
+      referencia:
+        description: "Referencia bíblica (ej. Salmos 37:5)"
+        required: true
+        type: string
+      fecha:
+        description: "Fecha YYYY-MM-DD"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar sitio
+        uses: actions/checkout@v4
+
+      - name: Agregar reflexión
+        env:
+          TITULO: ${{ inputs.titulo }}
+          MENSAJE: ${{ inputs.mensaje }}
+          VERSICULO: ${{ inputs.versiculo }}
+          REFERENCIA: ${{ inputs.referencia }}
+          FECHA: ${{ inputs.fecha }}
+        run: |
+          python3 <<'PY'
+          import json
+          import os
+
+          archivo = "publicaciones.json"
+
+          with open(archivo, "r", encoding="utf-8") as f:
+              data = json.load(f)
+
+          nueva = {
+              "titulo": os.environ["TITULO"],
+              "mensaje": os.environ["MENSAJE"],
+              "versiculo": os.environ["VERSICULO"],
+              "referencia": os.environ["REFERENCIA"],
+              "fecha": os.environ["FECHA"]
+          }
+
+          data.setdefault("publicaciones", []).append(nueva)
+
+          with open(archivo, "w", encoding="utf-8") as f:
+              json.dump(data, f, ensure_ascii=False, indent=2)
+
+          print("Reflexión agregada correctamente.")
+          PY
+
+      - name: Guardar publicación
+        run: |
+          git config user.name "Samuel Publicaciones"
+          git config user.email "actions@github.com"
+          git add publicaciones.json
+          git commit -m "Nueva reflexión: ${{ inputs.titulo }}"
+          git push
