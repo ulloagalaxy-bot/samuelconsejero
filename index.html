@@ -152,11 +152,34 @@
 </main>
 
 <footer><strong>Samuel | Consejero Espiritual</strong><span>Fe que fortalece · Esperanza que renueva · Enseñanzas que guían</span></footer>
-  <script>
+<script>
 fetch('publicaciones.json')
   .then(response => response.json())
   .then(data => {
-    console.log('Publicaciones cargadas:', data.publicaciones);
+    const publicaciones = data.publicaciones;
+    const comunidad = document.querySelector('#comunidad');
+
+    if (!comunidad || !publicaciones || publicaciones.length === 0) return;
+
+    const contenedor = document.createElement('div');
+    contenedor.className = 'publicaciones';
+
+    publicaciones.forEach(publicacion => {
+      const articulo = document.createElement('article');
+      articulo.className = 'publicacion';
+
+      articulo.innerHTML = `
+        <p class="kicker">REFLEXIÓN DEL DÍA</p>
+        <h2>${publicacion.titulo}</h2>
+        <p>${publicacion.mensaje}</p>
+        <blockquote>“${publicacion.versiculo}”</blockquote>
+        <strong>${publicacion.referencia}</strong>
+      `;
+
+      contenedor.appendChild(articulo);
+    });
+
+    comunidad.parentNode.insertBefore(contenedor, comunidad);
   })
   .catch(error => {
     console.error('Error cargando publicaciones:', error);
