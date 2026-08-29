@@ -152,5 +152,15 @@
 </main>
 
 <footer><strong>Samuel | Consejero Espiritual</strong><span>Fe que fortalece · Esperanza que renueva · Enseñanzas que guían</span></footer>
+  <script>
+fetch('publicaciones.json')
+  .then(response => response.json())
+  .then(data => {
+    console.log('Publicaciones cargadas:', data.publicaciones);
+  })
+  .catch(error => {
+    console.error('Error cargando publicaciones:', error);
+  });
+</script>
 </body>
 </html>
