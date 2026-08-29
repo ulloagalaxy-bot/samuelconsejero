@@ -1,0 +1,76 @@
+name: Publicación diaria
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+      timezone: "America/Los_Angeles"
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar sitio
+        uses: actions/checkout@v6
+
+      - name: Publicar siguiente reflexión
+        run: |
+          python3 <<'PY'
+          import json
+          from datetime import datetime
+          from zoneinfo import ZoneInfo
+
+          archivo_programadas = "programadas.json"
+          archivo_publicaciones = "publicaciones.json"
+
+          with open(archivo_programadas, "r", encoding="utf-8") as f:
+              programadas = json.load(f)
+
+          cola = programadas.get("programadas", [])
+
+          if not cola:
+              print("No quedan reflexiones programadas.")
+              raise SystemExit(0)
+
+          nueva = cola.pop(0)
+
+          fecha_hoy = datetime.now(
+              ZoneInfo("America/Los_Angeles")
+          ).strftime("%Y-%m-%d")
+
+          nueva["fecha"] = fecha_hoy
+
+          with open(archivo_publicaciones, "r", encoding="utf-8") as f:
+              publicaciones = json.load(f)
+
+          publicaciones.setdefault("publicaciones", []).append(nueva)
+
+          with open(archivo_publicaciones, "w", encoding="utf-8") as f:
+              json.dump(publicaciones, f, ensure_ascii=False, indent=2)
+
+          with open(archivo_programadas, "w", encoding="utf-8") as f:
+              json.dump(programadas, f, ensure_ascii=False, indent=2)
+
+          print("Publicada:", nueva["titulo"])
+          print("Fecha:", fecha_hoy)
+          print("Quedan programadas:", len(cola))
+          PY
+
+      - name: Guardar cambios
+        run: |
+          if git diff --quiet; then
+            echo "No hay cambios para guardar."
+            exit 0
+          fi
+
+          git config user.name "Samuel Publicaciones"
+          git config user.email "actions@github.com"
+
+          git add publicaciones.json programadas.json
+          git commit -m "Publicación diaria automática"
+          git push
