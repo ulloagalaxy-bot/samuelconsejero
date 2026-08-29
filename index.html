@@ -164,20 +164,31 @@ fetch('publicaciones.json')
     const contenedor = document.createElement('div');
     contenedor.className = 'publicaciones';
 
-    publicaciones.forEach(publicacion => {
-      const articulo = document.createElement('article');
-      articulo.className = 'publicacion';
+  [...publicaciones]
+  .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+  .forEach(publicacion => {
+    const articulo = document.createElement('article');
+    articulo.className = 'publicacion';
 
-      articulo.innerHTML = `
-        <p class="kicker">REFLEXIÓN DEL DÍA</p>
-        <h2>${publicacion.titulo}</h2>
-        <p>${publicacion.mensaje}</p>
-        <blockquote>“${publicacion.versiculo}”</blockquote>
-        <strong>${publicacion.referencia}</strong>
-      `;
+    const fecha = publicacion.fecha
+      ? new Date(publicacion.fecha + 'T12:00:00').toLocaleDateString('es-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        })
+      : '';
 
-      contenedor.appendChild(articulo);
-    });
+    articulo.innerHTML = `
+      <p class="kicker">REFLEXIÓN DEL DÍA</p>
+      <p class="fecha-publicacion">${fecha}</p>
+      <h2>${publicacion.titulo}</h2>
+      <p>${publicacion.mensaje}</p>
+      <blockquote>“${publicacion.versiculo}”</blockquote>
+      <strong>${publicacion.referencia}</strong>
+    `;
+
+    contenedor.appendChild(articulo);
+  });
 
     comunidad.parentNode.insertBefore(contenedor, comunidad);
   })
