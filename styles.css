@@ -139,7 +139,7 @@
 }
 
 .imagen-publicacion {
-  width: 100%;
+  width: 85%;
   max-height: 320px;
   object-fit: cover;
   border-radius: 18px;
