@@ -179,12 +179,21 @@ fetch('publicaciones.json')
       : '';
 
     articulo.innerHTML = `
-      <p class="kicker">REFLEXIÓN DEL DÍA</p>
-      <p class="fecha-publicacion">${fecha}</p>
-      <h2>${publicacion.titulo}</h2>
-      <p>${publicacion.mensaje}</p>
-      <blockquote>“${publicacion.versiculo}”</blockquote>
-      <strong>${publicacion.referencia}</strong>
+   <p class="kicker">REFLEXIÓN DEL DÍA</p>
+<p class="fecha-publicacion">${fecha}</p>
+
+${publicacion.imagen ? `
+  <img
+    src="${publicacion.imagen}"
+    alt="${publicacion.titulo}"
+    class="imagen-publicacion"
+  >
+` : ''}
+
+<h2>${publicacion.titulo}</h2>
+<p>${publicacion.mensaje}</p>
+<blockquote>"${publicacion.versiculo}"</blockquote>
+<strong>${publicacion.referencia}</strong>
     `;
 
     contenedor.appendChild(articulo);
