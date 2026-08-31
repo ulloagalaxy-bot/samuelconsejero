@@ -71,6 +71,9 @@ jobs:
           git config user.name "Samuel Publicaciones"
           git config user.email "actions@github.com"
 
+        git add publicaciones.json programadas.json
+        git commit -m "Publicación diaria automática"
+        git push
           git add publicaciones.json programadas.json
           git commit -m "Publicación diaria automática"
           git push
