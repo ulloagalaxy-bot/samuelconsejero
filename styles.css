@@ -139,11 +139,13 @@
 }
 
 .imagen-publicacion {
-  width: 60%;
-  height: auto;
-  object-fit: contain;
-  border-radius: 18px;
-  margin: 18px auto 22px;
-  display: block;
+    width: 55% !important;
+    max-width: 550px !important;
+    height: auto !important;
+    object-fit: contain;
+    border-radius: 18px;
+    margin: 18px auto 22px;
+    display: block;
+}
 }
 }
