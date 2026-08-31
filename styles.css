@@ -139,8 +139,8 @@
 }
 
 .imagen-publicacion {
-    width: 45% !important;
-    max-width: 450px !important;
+    width: 100% !important;
+    max-width: 650px !important;
     height: auto !important;
     object-fit: contain;
     border-radius: 18px;
